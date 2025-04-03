@@ -1,0 +1,2 @@
+class_name PickupableItem
+extends RigidBody3D

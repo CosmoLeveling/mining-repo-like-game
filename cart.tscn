@@ -1,0 +1,133 @@
+[gd_scene load_steps=15 format=3 uid="uid://dpci6e7r2lk3g"]
+
+[ext_resource type="Script" uid="uid://besr7qrqenwoe" path="res://cart.gd" id="1_aph70"]
+[ext_resource type="Script" uid="uid://coacd1ch8kxwe" path="res://interaction_area.gd" id="2_4bypq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_pjrxg"]
+size = Vector3(2, 0.1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aph70"]
+size = Vector3(0.1, 1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4bypq"]
+size = Vector3(0.1, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rb7fp"]
+size = Vector3(2, 0.1, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jplhf"]
+size = Vector3(0.1, 1, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_esel8"]
+size = Vector3(0.1, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vrp51"]
+size = Vector3(0.1, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4bypq"]
+size = Vector3(2, 1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rb7fp"]
+size = Vector3(0.1, 0.5, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oxgae"]
+size = Vector3(0.1, 0.5, 2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_aph70"]
+top_radius = 0.15
+bottom_radius = 0.2
+height = 0.05
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_rb7fp"]
+height = 0.05
+radius = 0.2
+
+[node name="RigidBody3D" type="RigidBody3D"]
+script = ExtResource("1_aph70")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_pjrxg")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)
+mesh = SubResource("BoxMesh_aph70")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 0)
+mesh = SubResource("BoxMesh_aph70")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.37114e-08, 0.5, 1.5)
+mesh = SubResource("BoxMesh_4bypq")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.37114e-08, 0.5, -1.5)
+mesh = SubResource("BoxMesh_4bypq")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_rb7fp")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)
+shape = SubResource("BoxShape3D_jplhf")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 0)
+shape = SubResource("BoxShape3D_jplhf")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.37114e-08, 0.5, 1.5)
+shape = SubResource("BoxShape3D_esel8")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.37114e-08, 0.5, -1.5)
+shape = SubResource("BoxShape3D_vrp51")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_4bypq")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, -0.5, 0.866025, -2.18557e-08, -0.866025, -0.5, -3.78552e-08, 4.37114e-08, 1, 1.5)
+mesh = SubResource("BoxMesh_rb7fp")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, -0.5, 0.866025, -2.18557e-08, -0.866025, -0.5, -3.78552e-08, 4.37114e-08, 1, 1.5)
+shape = SubResource("BoxShape3D_oxgae")
+
+[node name="Label3D" type="Label3D" parent="CollisionShape3D6"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.0556687, -1.86265e-09, -1.87457e-09)
+text = "0"
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, -0.7, 1, 1.58)
+mesh = SubResource("CylinderMesh_aph70")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0.7, 1, 1.58)
+mesh = SubResource("CylinderMesh_aph70")
+
+[node name="Up" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0.7, 1, 1.58)
+script = ExtResource("2_4bypq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Up"]
+shape = SubResource("CylinderShape3D_rb7fp")
+
+[node name="Down" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, -0.7, 1, 1.58)
+script = ExtResource("2_4bypq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Down"]
+shape = SubResource("CylinderShape3D_rb7fp")
+
+[connection signal="interact" from="Up" to="." method="_on_up_interact"]
+[connection signal="interact" from="Down" to="." method="_on_down_interact"]

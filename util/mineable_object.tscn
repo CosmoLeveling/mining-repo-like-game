@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://plsd1428j51r"]
+
+[ext_resource type="Script" uid="uid://braopeij33uj7" path="res://util/mineable_object.gd" id="1_mwhgc"]
+[ext_resource type="PackedScene" uid="uid://dvpyfevdpmv5w" path="res://util/items/sellable_item.tscn" id="2_mwhgc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_khehk"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_mwhgc"]
+
+[node name="mineable_object" type="StaticBody3D"]
+script = ExtResource("1_mwhgc")
+drop_scene = ExtResource("2_mwhgc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_khehk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_mwhgc")

@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://6tb12758d8ad"]
+
+[ext_resource type="Script" uid="uid://bkp145ek1h6jr" path="res://Scripts/player.gd" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://dm6cdtuu3kl8t" path="res://components/movement_component.gd" id="2_cvnsp"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cvnsp"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_cvnsp"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" node_paths=PackedStringArray("movement_component")]
+script = ExtResource("1_v0iea")
+movement_component = NodePath("MovementComponent")
+
+[node name="MovementComponent" type="Node" parent="."]
+script = ExtResource("2_cvnsp")
+metadata/_custom_type_script = "uid://dm6cdtuu3kl8t"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_cvnsp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_cvnsp")
+
+[node name="HeadPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="HeadPivot"]
+
+[node name="Interaction" type="RayCast3D" parent="HeadPivot/Camera3D"]
+target_position = Vector3(0, 0, -5)
+collide_with_areas = true
+
+[node name="PickupLocation" type="Marker3D" parent="HeadPivot/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.64055)

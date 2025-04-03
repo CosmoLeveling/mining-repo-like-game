@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ba3fvnm0k04tj"]
+
+[ext_resource type="Script" uid="uid://dywcx2fsvo6up" path="res://util/items/pickupable_item.gd" id="1_u5fo8"]
+
+[node name="Pickupable_Item" type="RigidBody3D"]
+script = ExtResource("1_u5fo8")

@@ -1,0 +1,167 @@
+[gd_scene load_steps=17 format=3 uid="uid://dpg1y442ryxqx"]
+
+[ext_resource type="Script" uid="uid://ooheeo86w4ki" path="res://Scripts/test_world.gd" id="1_707cn"]
+[ext_resource type="Texture2D" uid="uid://c8mgw3cqj03v6" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="1_au00k"]
+[ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/player.tscn" id="2_707cn"]
+[ext_resource type="PackedScene" uid="uid://b66hf2wr4wewb" path="res://item_test.tscn" id="4_iwv7r"]
+[ext_resource type="PackedScene" uid="uid://plsd1428j51r" path="res://util/mineable_object.tscn" id="5_iwv7r"]
+[ext_resource type="PackedScene" uid="uid://dygwtfjaj5tot" path="res://util/sell_platform.tscn" id="6_kt01x"]
+[ext_resource type="Script" uid="uid://cusm76pnm4tdq" path="res://Scenes/track_path.gd" id="7_0fcji"]
+[ext_resource type="Script" uid="uid://dbmc5lnbaifwn" path="res://Scenes/path_follower.gd" id="8_dqfvb"]
+[ext_resource type="PackedScene" uid="uid://dpci6e7r2lk3g" path="res://cart.tscn" id="9_dqfvb"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dqfvb"]
+
+[sub_resource type="Sky" id="Sky_yrarp"]
+sky_material = SubResource("ProceduralSkyMaterial_dqfvb")
+
+[sub_resource type="Environment" id="Environment_5qo1a"]
+background_mode = 2
+sky = SubResource("Sky_yrarp")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mq1bj"]
+albedo_texture = ExtResource("1_au00k")
+uv1_triplanar = true
+
+[sub_resource type="Curve3D" id="Curve3D_dqfvb"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_0fcji"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, -10, 0, 0, 0, 10, 0, 10),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_yrarp"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="test_world" type="Node3D"]
+script = ExtResource("1_707cn")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5qo1a")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+use_collision = true
+size = Vector3(100, 2, 100)
+material = SubResource("StandardMaterial3D_mq1bj")
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_707cn")]
+
+[node name="PickupableItem" parent="." instance=ExtResource("4_iwv7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.380749, -8.84468)
+
+[node name="SellPlatform" parent="." instance=ExtResource("6_kt01x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.3956)
+
+[node name="Cart" parent="." node_paths=PackedStringArray("point") instance=ExtResource("9_dqfvb")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 1.39755, 15.5747)
+mass = 10.0
+continuous_cd = true
+height_adjustment = 0.5
+point = NodePath("../Paths/Path3D/PathFollow3D/Node3D")
+
+[node name="Mineables" type="Node3D" parent="."]
+
+[node name="mineable_object" parent="Mineables" instance=ExtResource("5_iwv7r")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.98884, 0.5, 7.82778)
+max_progress = 10
+
+[node name="mineable_object2" parent="Mineables" instance=ExtResource("5_iwv7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.244906, 0.5, -5.47263)
+max_progress = 10
+
+[node name="mineable_object3" parent="Mineables" instance=ExtResource("5_iwv7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.88423, 0.5, 0.99735)
+max_progress = 10
+
+[node name="Paths" type="Node3D" parent="."]
+
+[node name="Path3D" type="Path3D" parent="Paths" node_paths=PackedStringArray("next_path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.102, 15.575)
+curve = SubResource("Curve3D_dqfvb")
+script = ExtResource("7_0fcji")
+next_path = NodePath("../Path3D2")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Paths/Path3D" node_paths=PackedStringArray("cart")]
+physics_interpolation_mode = 1
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+loop = false
+script = ExtResource("8_dqfvb")
+cart = NodePath("../../../Cart")
+
+[node name="Node3D" type="Node3D" parent="Paths/Path3D/PathFollow3D"]
+
+[node name="Path3D2" type="Path3D" parent="Paths" node_paths=PackedStringArray("prev_track", "next_path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.101508, 15.575)
+curve = SubResource("Curve3D_0fcji")
+script = ExtResource("7_0fcji")
+prev_track = NodePath("../Path3D")
+next_path = NodePath("../Path3D3")
+
+[node name="Path3D3" type="Path3D" parent="Paths" node_paths=PackedStringArray("prev_track")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.102, 25.575)
+curve = SubResource("Curve3D_yrarp")
+script = ExtResource("7_0fcji")
+prev_track = NodePath("../Path3D2")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0836725)
+polygon = PackedVector2Array(0.1, 0, 0.15, -0.1, -0.15, -0.1, -0.1, 0, -0.05, -0.05, 0.05, -0.05)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0836725)
+polygon = PackedVector2Array(0.1, 0, 0.15, -0.1, -0.15, -0.1, -0.1, 0, -0.05, -0.05, 0.05, -0.05)
+mode = 2
+path_node = NodePath("../Path3D2")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="CSGPolygon3D3" type="CSGPolygon3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0836725)
+polygon = PackedVector2Array(0.1, 0, 0.15, -0.1, -0.15, -0.1, -0.1, 0, -0.05, -0.05, 0.05, -0.05)
+mode = 2
+path_node = NodePath("../Path3D3")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false

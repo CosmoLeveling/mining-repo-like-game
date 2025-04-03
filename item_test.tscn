@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://b66hf2wr4wewb"]
+
+[ext_resource type="Script" uid="uid://dywcx2fsvo6up" path="res://util/items/pickupable_item.gd" id="1_ntug4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iwv7r"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kt01x"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="PickupableItem" type="RigidBody3D"]
+script = ExtResource("1_ntug4")
+metadata/_custom_type_script = "uid://dywcx2fsvo6up"
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_iwv7r")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_kt01x")
