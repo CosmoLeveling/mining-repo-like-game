@@ -1,0 +1,18 @@
+class_name Room
+extends StaticBody3D
+
+@export var size: Vector2 = Vector2(20, 20)
+
+func get_doors() -> Array[Dictionary]:
+	if not is_inside_tree():
+		return []
+	var doors:Array[Dictionary] = []
+	for door in $Doors.get_children():
+		var dict :Dictionary ={
+			"position": door.global_transform.origin,
+			"direction": door.global_transform.basis.z.normalized(), # The forward direction
+			"local_position": door.position,  # Position relative to the room
+			"node": door  # Reference to the door marker
+		}
+		doors.append(dict)
+	return doors

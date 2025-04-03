@@ -64,8 +64,8 @@ func handle_interact():
 			var mineable_object : mineable = collider
 			mineable_object.interact()
 		elif collider is InteractionArea:
-			var interaction : InteractionArea = collider
-			interaction.interact.emit()
+			var interactionArea : InteractionArea = collider
+			interactionArea.interact.emit()
 
 func _push_away_rigid_bodies():
 	for i in get_slide_collision_count():

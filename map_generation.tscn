@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://cejyqytnh2ka4"]
+
+[ext_resource type="Script" uid="uid://buhtflxmthv7q" path="res://map_generation.gd" id="1_dgbp0"]
+[ext_resource type="PackedScene" uid="uid://bwlgh0ke3kkmo" path="res://start_room.tscn" id="2_b2p3l"]
+[ext_resource type="PackedScene" uid="uid://lh1sln1gx0nl" path="res://room_test.tscn" id="3_xlbuu"]
+
+[node name="MapGeneration" type="Node3D"]
+script = ExtResource("1_dgbp0")
+start_room = ExtResource("2_b2p3l")
+room_scenes = Array[PackedScene]([ExtResource("3_xlbuu")])

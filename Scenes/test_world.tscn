@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dpg1y442ryxqx"]
+[gd_scene load_steps=18 format=3 uid="uid://dpg1y442ryxqx"]
 
 [ext_resource type="Script" uid="uid://ooheeo86w4ki" path="res://Scripts/test_world.gd" id="1_707cn"]
 [ext_resource type="Texture2D" uid="uid://c8mgw3cqj03v6" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="1_au00k"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cusm76pnm4tdq" path="res://Scenes/track_path.gd" id="7_0fcji"]
 [ext_resource type="Script" uid="uid://dbmc5lnbaifwn" path="res://Scenes/path_follower.gd" id="8_dqfvb"]
 [ext_resource type="PackedScene" uid="uid://dpci6e7r2lk3g" path="res://cart.tscn" id="9_dqfvb"]
+[ext_resource type="PackedScene" uid="uid://cejyqytnh2ka4" path="res://map_generation.tscn" id="10_yrarp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dqfvb"]
 
@@ -165,3 +166,5 @@ path_local = false
 path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
+
+[node name="MapGeneration" parent="." instance=ExtResource("10_yrarp")]

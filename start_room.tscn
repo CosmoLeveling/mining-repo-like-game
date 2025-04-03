@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://bwlgh0ke3kkmo"]
+
+[ext_resource type="Script" uid="uid://chr6utriwcqj3" path="res://room.gd" id="1_ctwpx"]
+[ext_resource type="Texture2D" uid="uid://biwq8oxbypynv" path="res://addons/kenney_prototype_textures/red/texture_01.png" id="2_ctwpx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ctwpx"]
+albedo_texture = ExtResource("2_ctwpx")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_x135f"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rkvpa"]
+size = Vector3(20, 1, 20)
+
+[node name="StartRoom" type="StaticBody3D"]
+script = ExtResource("1_ctwpx")
+
+[node name="Doors" type="Node3D" parent="."]
+
+[node name="Door" type="Marker3D" parent="Doors"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_ctwpx")
+mesh = SubResource("BoxMesh_x135f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_rkvpa")

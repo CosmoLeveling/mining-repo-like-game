@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://lh1sln1gx0nl"]
+
+[ext_resource type="Script" uid="uid://chr6utriwcqj3" path="res://room.gd" id="1_yq7rk"]
+[ext_resource type="Texture2D" uid="uid://biwq8oxbypynv" path="res://addons/kenney_prototype_textures/red/texture_01.png" id="2_yq7rk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wi0rs"]
+albedo_texture = ExtResource("2_yq7rk")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_p1rem"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_65mac"]
+size = Vector3(20, 1, 20)
+
+[node name="Room" type="StaticBody3D"]
+script = ExtResource("1_yq7rk")
+size = Vector2(40, 20)
+metadata/_custom_type_script = "uid://chr6utriwcqj3"
+
+[node name="Doors" type="Node3D" parent="."]
+
+[node name="Door" type="Marker3D" parent="Doors"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 0, 0)
+
+[node name="Door2" type="Marker3D" parent="Doors"]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -10, 0, 0)
+
+[node name="Door3" type="Marker3D" parent="Doors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="Door4" type="Marker3D" parent="Doors"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_wi0rs")
+mesh = SubResource("BoxMesh_p1rem")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_65mac")
