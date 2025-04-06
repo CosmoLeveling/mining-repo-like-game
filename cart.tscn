@@ -43,6 +43,7 @@ height = 0.05
 radius = 0.2
 
 [node name="RigidBody3D" type="RigidBody3D"]
+mass = 10.0
 script = ExtResource("1_aph70")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -129,5 +130,16 @@ script = ExtResource("2_4bypq")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Down"]
 shape = SubResource("CylinderShape3D_rb7fp")
 
+[node name="Switch" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0.566988, 1.83)
+script = ExtResource("2_4bypq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Switch"]
+shape = SubResource("CylinderShape3D_rb7fp")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Switch"]
+mesh = SubResource("CylinderMesh_aph70")
+
 [connection signal="interact" from="Up" to="." method="_on_up_interact"]
 [connection signal="interact" from="Down" to="." method="_on_down_interact"]
+[connection signal="interact" from="Switch" to="." method="_on_switch_interact"]

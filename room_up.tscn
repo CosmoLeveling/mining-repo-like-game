@@ -1,0 +1,110 @@
+[gd_scene load_steps=10 format=3 uid="uid://ckh8gfjr8x6pt"]
+
+[ext_resource type="Script" uid="uid://chr6utriwcqj3" path="res://room.gd" id="1_dm6f3"]
+[ext_resource type="PackedScene" uid="uid://dl2j5pfp5wb4h" path="res://assets/elevator_cave.blend" id="4_n5kci"]
+[ext_resource type="Script" uid="uid://iey8q4md83vt" path="res://rail_handler.gd" id="4_qe6g7"]
+[ext_resource type="Script" uid="uid://cusm76pnm4tdq" path="res://Scenes/track_path.gd" id="5_mlt83"]
+[ext_resource type="Material" uid="uid://xq7m8egqv2yi" path="res://assets/ground.tres" id="5_qe6g7"]
+
+[sub_resource type="Curve3D" id="Curve3D_r4kl1"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, 0, 0, 0, -10, 0, 10),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_gwm7g"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, -10, 0, -10),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_h13ju"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, 0, 0, 0, 10, 0, 10),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_3si4v"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, -10),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("railHandler")]
+script = ExtResource("1_dm6f3")
+vert_offset = 9
+railHandler = NodePath("RailHandler")
+size = Vector3(20, 19.5, 20)
+
+[node name="Doors" type="Node3D" parent="."]
+
+[node name="Door" type="Marker3D" parent="Doors"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 0, 0)
+
+[node name="Door2" type="Marker3D" parent="Doors"]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -10, 0, 0)
+
+[node name="Door3" type="Marker3D" parent="Doors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="Door4" type="Marker3D" parent="Doors"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -10)
+
+[node name="Door5" type="Marker3D" parent="Doors"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 9.4, 0)
+
+[node name="Door6" type="Marker3D" parent="Doors"]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -10, 9.4, 0)
+
+[node name="Door7" type="Marker3D" parent="Doors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 10)
+
+[node name="Door8" type="Marker3D" parent="Doors"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 9.4, -10)
+
+[node name="RailHandler" type="Node3D" parent="." node_paths=PackedStringArray("Rails")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.72748e-05, 4.3869e-05, -0.053954)
+script = ExtResource("4_qe6g7")
+Rails = [NodePath("Rail"), NodePath("Rail2"), NodePath("Rail3"), NodePath("Rail4")]
+metadata/_custom_type_script = "uid://iey8q4md83vt"
+
+[node name="Rail" type="Path3D" parent="RailHandler"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, 0)
+curve = SubResource("Curve3D_r4kl1")
+script = ExtResource("5_mlt83")
+metadata/_custom_type_script = "uid://cusm76pnm4tdq"
+
+[node name="Rail2" type="Path3D" parent="RailHandler"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, 0)
+curve = SubResource("Curve3D_gwm7g")
+script = ExtResource("5_mlt83")
+metadata/_custom_type_script = "uid://cusm76pnm4tdq"
+
+[node name="Rail3" type="Path3D" parent="RailHandler"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, 0)
+curve = SubResource("Curve3D_h13ju")
+script = ExtResource("5_mlt83")
+metadata/_custom_type_script = "uid://cusm76pnm4tdq"
+
+[node name="Rail4" type="Path3D" parent="RailHandler"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, 0)
+curve = SubResource("Curve3D_3si4v")
+script = ExtResource("5_mlt83")
+metadata/_custom_type_script = "uid://cusm76pnm4tdq"
+
+[node name="elevator_cave" parent="." instance=ExtResource("4_n5kci")]
+
+[node name="Dome" parent="elevator_cave" index="0"]
+surface_material_override/1 = ExtResource("5_qe6g7")
+
+[node name="CollisionShape3D" parent="elevator_cave/Dome/StaticBody3D" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="elevator_cave/Dome_001/StaticBody3D" index="0"]
+visible = false
+
+[editable path="elevator_cave"]

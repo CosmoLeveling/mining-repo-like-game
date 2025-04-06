@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bwlgh0ke3kkmo"]
+[gd_scene load_steps=9 format=3 uid="uid://bwlgh0ke3kkmo"]
 
-[ext_resource type="Script" uid="uid://chr6utriwcqj3" path="res://room.gd" id="1_ctwpx"]
+[ext_resource type="Script" uid="uid://3lg1gwk4nda5" path="res://start_room.gd" id="1_rkvpa"]
 [ext_resource type="Texture2D" uid="uid://biwq8oxbypynv" path="res://addons/kenney_prototype_textures/red/texture_01.png" id="2_ctwpx"]
+[ext_resource type="Script" uid="uid://iey8q4md83vt" path="res://rail_handler.gd" id="3_rkvpa"]
+[ext_resource type="Script" uid="uid://cusm76pnm4tdq" path="res://Scenes/track_path.gd" id="4_eqsgk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ctwpx"]
 albedo_texture = ExtResource("2_ctwpx")
@@ -13,8 +15,17 @@ size = Vector3(20, 1, 20)
 [sub_resource type="BoxShape3D" id="BoxShape3D_rkvpa"]
 size = Vector3(20, 1, 20)
 
-[node name="StartRoom" type="StaticBody3D"]
-script = ExtResource("1_ctwpx")
+[sub_resource type="Curve3D" id="Curve3D_0jcho"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="StartRoom" type="StaticBody3D" node_paths=PackedStringArray("MainRail", "railHandler")]
+script = ExtResource("1_rkvpa")
+MainRail = NodePath("RailHandler/Rail")
+railHandler = NodePath("RailHandler")
 
 [node name="Doors" type="Node3D" parent="."]
 
@@ -27,3 +38,14 @@ mesh = SubResource("BoxMesh_x135f")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_rkvpa")
+
+[node name="RailHandler" type="Node3D" parent="." node_paths=PackedStringArray("Rails")]
+script = ExtResource("3_rkvpa")
+Rails = [NodePath("Rail")]
+metadata/_custom_type_script = "uid://iey8q4md83vt"
+
+[node name="Rail" type="Path3D" parent="RailHandler"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.605916, 0)
+curve = SubResource("Curve3D_0jcho")
+script = ExtResource("4_eqsgk")
+metadata/_custom_type_script = "uid://cusm76pnm4tdq"

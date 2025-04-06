@@ -1,12 +1,45 @@
-[gd_scene load_steps=4 format=3 uid="uid://rid0w54pl5v3"]
+[gd_scene load_steps=11 format=3 uid="uid://rid0w54pl5v3"]
 
 [ext_resource type="Script" uid="uid://ooheeo86w4ki" path="res://Scripts/test_world.gd" id="1_d8k14"]
 [ext_resource type="PackedScene" uid="uid://cejyqytnh2ka4" path="res://map_generation.tscn" id="1_htxwe"]
 [ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/player.tscn" id="2_d8k14"]
+[ext_resource type="PackedScene" uid="uid://lh1sln1gx0nl" path="res://room_test.tscn" id="3_aljjk"]
+[ext_resource type="PackedScene" uid="uid://dpci6e7r2lk3g" path="res://cart.tscn" id="4_2ub1q"]
+[ext_resource type="PackedScene" uid="uid://d0vhyns8o2yp4" path="res://room_test_two.tscn" id="4_rkgl4"]
+[ext_resource type="PackedScene" uid="uid://ckh8gfjr8x6pt" path="res://room_up.tscn" id="5_qque5"]
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ub1q"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_aljjk"]
+sky_material = SubResource("ProceduralSkyMaterial_2ub1q")
+
+[sub_resource type="Environment" id="Environment_rkgl4"]
+background_mode = 2
+sky = SubResource("Sky_aljjk")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("generator")]
 script = ExtResource("1_d8k14")
+generator = NodePath("MapGeneration")
 
-[node name="MapGeneration" parent="." instance=ExtResource("1_htxwe")]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rkgl4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MapGeneration" parent="." node_paths=PackedStringArray("cart") instance=ExtResource("1_htxwe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.53674e-07, -4.76837e-07, -1.90735e-06)
+room_scenes = Array[PackedScene]([ExtResource("3_aljjk"), ExtResource("5_qque5"), ExtResource("4_rkgl4")])
+max_rooms = 20
+cart = NodePath("../RigidBody3D")
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("2_d8k14")]
+
+[node name="RigidBody3D" parent="." instance=ExtResource("4_2ub1q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00930786, 3.65199, -0.0321426)
+height_adjustment = 0.5
