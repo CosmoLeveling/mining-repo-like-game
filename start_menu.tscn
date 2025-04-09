@@ -1,0 +1,92 @@
+[gd_scene load_steps=10 format=3 uid="uid://dj8fo7q7j6drw"]
+
+[ext_resource type="PackedScene" uid="uid://balqqg5ec3qo" path="res://assets/drill.blend" id="1_jwbto"]
+[ext_resource type="PackedScene" uid="uid://uk0exlfjcigi" path="res://assets/main_menu_ground.blend" id="2_ia0g5"]
+[ext_resource type="Texture2D" uid="uid://b0f2ot7fsetcy" path="res://assets/ground_albedo.png" id="3_ctwoq"]
+[ext_resource type="Texture2D" uid="uid://b6cp5dr2aqcmu" path="res://assets/ground_orm.png" id="4_ppfnh"]
+[ext_resource type="Texture2D" uid="uid://bfqet3k3vc37u" path="res://assets/ground_normal.png" id="5_7boi2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jwbto"]
+sky_top_color = Color(0.239132, 0.432119, 0.795382, 1)
+sky_horizon_color = Color(0.492595, 0.679115, 0.827509, 1)
+ground_bottom_color = Color(0.125624, 0.103521, 0.077845, 1)
+ground_horizon_color = Color(0.47252, 0.688832, 0.761961, 1)
+
+[sub_resource type="Sky" id="Sky_ia0g5"]
+sky_material = SubResource("ProceduralSkyMaterial_jwbto")
+
+[sub_resource type="Environment" id="Environment_ia0g5"]
+background_mode = 2
+sky = SubResource("Sky_ia0g5")
+ambient_light_energy = 0.0
+tonemap_mode = 2
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/4 = 1.0
+glow_levels/6 = 1.0
+glow_levels/7 = 1.0
+fog_enabled = true
+fog_light_energy = 0.15
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.025
+volumetric_fog_albedo = Color(0.293846, 0.333836, 0.470605, 1)
+volumetric_fog_emission = Color(1.58831e-06, 0, 0.617782, 1)
+volumetric_fog_emission_energy = 0.1
+volumetric_fog_length = 128.0
+volumetric_fog_sky_affect = 0.0
+adjustment_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pgi0o"]
+albedo_color = Color(0.128112, 0.0265006, 0.322869, 1)
+albedo_texture = ExtResource("3_ctwoq")
+roughness_texture = ExtResource("4_ppfnh")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("5_7boi2")
+ao_enabled = true
+ao_texture = ExtResource("4_ppfnh")
+uv1_triplanar = true
+
+[node name="StartMenu" type="Node3D"]
+
+[node name="WorldEnvironment2" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ia0g5")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.612742, 0, 0.790283, 0, 1, 0, -0.790283, 0, 0.612742, 15.8542, 6.2407, 22.8344)
+
+[node name="drill" parent="." instance=ExtResource("1_jwbto")]
+transform = Transform3D(-0.357341, 0, 0.933974, 0, 1, 0, -0.933974, 0, -0.357341, 2.82183, 1.2, 7.37534)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(-0.612879, 0, 0.790177, 0, 1, 0, -0.790177, 0, -0.612879, 5.35715, 13.1198, 12.1576)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+shadow_enabled = true
+omni_range = 15.0364
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(-0.612879, 0, 0.790177, 0, 1, 0, -0.790177, 0, -0.612879, 3.33148, 14.8959, 7.53812)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+shadow_enabled = true
+omni_range = 15.0364
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(-0.612879, 0, 0.790177, 0, 1, 0, -0.790177, 0, -0.612879, 3.49693, 10.6102, 8.65082)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+shadow_enabled = true
+omni_range = 15.0364
+
+[node name="main_menu_ground" parent="." instance=ExtResource("2_ia0g5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.1976, 0, 15.8352)
+
+[node name="Plane" parent="main_menu_ground" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_pgi0o")
+
+[editable path="main_menu_ground"]

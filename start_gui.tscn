@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqsd00lmx1oo2"]
+[gd_scene load_steps=4 format=3 uid="uid://cqsd00lmx1oo2"]
+
+[ext_resource type="Script" uid="uid://bd8vrb2tdjclf" path="res://start_gui.gd" id="1_78vye"]
 
 [sub_resource type="Theme" id="Theme_iaxds"]
 Label/colors/font_color = Color(1, 1, 1, 1)
@@ -21,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_78vye")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -75,3 +78,5 @@ text = "Singleplayer"
 [node name="Control3" type="Control" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[connection signal="pressed" from="VBoxContainer/Singleplayer" to="." method="_on_singleplayer_pressed"]

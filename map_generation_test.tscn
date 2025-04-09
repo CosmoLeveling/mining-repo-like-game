@@ -11,11 +11,11 @@
 [ext_resource type="PackedScene" uid="uid://ckh8gfjr8x6pt" path="res://room_up.tscn" id="5_qque5"]
 [ext_resource type="PackedScene" uid="uid://balqqg5ec3qo" path="res://assets/drill.blend" id="10_wv5m1"]
 
-[sub_resource type="Sky" id="Sky_nxtwd"]
+[sub_resource type="Sky" id="Sky_wv5m1"]
 
 [sub_resource type="Environment" id="Environment_rkgl4"]
 background_mode = 1
-sky = SubResource("Sky_nxtwd")
+sky = SubResource("Sky_wv5m1")
 ambient_light_energy = 0.0
 tonemap_mode = 2
 ssil_enabled = true

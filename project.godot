@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Strata"
-run/main_scene="uid://rid0w54pl5v3"
+run/main_scene="uid://dj8fo7q7j6drw"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+MainCanvas="*res://main_canvas.tscn"
 
 [display]
 
