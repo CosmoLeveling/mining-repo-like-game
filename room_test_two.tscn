@@ -1,43 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://d0vhyns8o2yp4"]
+[gd_scene load_steps=6 format=3 uid="uid://d0vhyns8o2yp4"]
 
 [ext_resource type="Script" uid="uid://chr6utriwcqj3" path="res://room.gd" id="1_it8vv"]
 [ext_resource type="PackedScene" uid="uid://dcm1m8vv138x4" path="res://assets/t_junc_cave.blend" id="4_ai3ga"]
-[ext_resource type="Script" uid="uid://iey8q4md83vt" path="res://rail_handler.gd" id="4_s1xli"]
-[ext_resource type="Script" uid="uid://cusm76pnm4tdq" path="res://Scenes/track_path.gd" id="5_ai3ga"]
+[ext_resource type="ArrayOccluder3D" uid="uid://b6c6x5wv62rvy" path="res://Scenes/room_test_two.occ" id="4_m78h5"]
 [ext_resource type="Material" uid="uid://xq7m8egqv2yi" path="res://assets/ground.tres" id="5_s1xli"]
 
-[sub_resource type="Curve3D" id="Curve3D_k5shh"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, 0, 0, 0, -10, 0, 10),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
+[sub_resource type="FogMaterial" id="FogMaterial_m78h5"]
 
-[sub_resource type="Curve3D" id="Curve3D_5torl"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, -10, 0, -10),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
-
-[sub_resource type="Curve3D" id="Curve3D_767t2"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, 0, 0, 0, 10, 0, 10),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
-
-[sub_resource type="Curve3D" id="Curve3D_yg1st"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, -10),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
-
-[node name="Node3D" type="Node3D" node_paths=PackedStringArray("railHandler")]
+[node name="Node3D" type="Node3D"]
 script = ExtResource("1_it8vv")
 offset = Vector3(0, 4, 0)
-railHandler = NodePath("RailHandler")
 size = Vector3(20, 9, 20)
 
 [node name="Doors" type="Node3D" parent="."]
@@ -51,57 +23,50 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 [node name="Door4" type="Marker3D" parent="Doors"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -10)
 
-[node name="RailHandler" type="Node3D" parent="." node_paths=PackedStringArray("Rails")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.72748e-05, 4.3869e-05, -0.053954)
-script = ExtResource("4_s1xli")
-Rails = [NodePath("Rail"), NodePath("Rail2"), NodePath("Rail3"), NodePath("Rail4")]
-metadata/_custom_type_script = "uid://iey8q4md83vt"
-
-[node name="Rail" type="Path3D" parent="RailHandler"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, 0)
-curve = SubResource("Curve3D_k5shh")
-script = ExtResource("5_ai3ga")
-metadata/_custom_type_script = "uid://cusm76pnm4tdq"
-
-[node name="Rail2" type="Path3D" parent="RailHandler"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, 0)
-curve = SubResource("Curve3D_5torl")
-script = ExtResource("5_ai3ga")
-metadata/_custom_type_script = "uid://cusm76pnm4tdq"
-
-[node name="Rail3" type="Path3D" parent="RailHandler"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, 0)
-curve = SubResource("Curve3D_767t2")
-script = ExtResource("5_ai3ga")
-metadata/_custom_type_script = "uid://cusm76pnm4tdq"
-
-[node name="Rail4" type="Path3D" parent="RailHandler"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, 0)
-curve = SubResource("Curve3D_yg1st")
-script = ExtResource("5_ai3ga")
-metadata/_custom_type_script = "uid://cusm76pnm4tdq"
-
 [node name="t_junc_cave" parent="." instance=ExtResource("4_ai3ga")]
 
 [node name="Dome" parent="t_junc_cave" index="0"]
 surface_material_override/1 = ExtResource("5_s1xli")
 
-[node name="Point" type="OmniLight3D" parent="."]
+[node name="CollisionShape3D" parent="t_junc_cave/Dome/StaticBody3D" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="t_junc_cave/Dome_001/StaticBody3D" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="t_junc_cave/Dome_002/StaticBody3D" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="t_junc_cave/Dome_003/StaticBody3D" index="0"]
+visible = false
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="Point" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 7.3, -5.8)
 light_color = Color(1, 0.984314, 0.776471, 1)
 light_energy = 0.543514
 omni_range = 12.0
 
-[node name="Point_002" type="OmniLight3D" parent="."]
+[node name="Point_002" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -5.8, 7.3, 0)
 light_color = Color(1, 0.984314, 0.776471, 1)
 light_energy = 0.543514
 omni_range = 12.0
 
-[node name="Point_003" type="OmniLight3D" parent="."]
+[node name="Point_003" type="OmniLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 7.3, 5.8)
 light_color = Color(1, 0.984314, 0.776471, 1)
 light_energy = 0.543514
 omni_range = 12.0
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]
+visible = false
+occluder = ExtResource("4_m78h5")
+
+[node name="FogVolume" type="FogVolume" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0615723, 0)
+size = Vector3(20, 0.276855, 20)
+material = SubResource("FogMaterial_m78h5")
 
 [editable path="t_junc_cave"]

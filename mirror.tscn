@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://meehnbkm300d"]
+
+[ext_resource type="Script" uid="uid://f2fjdujju7qj" path="res://mirror.gd" id="1_scjey"]
+[ext_resource type="Shader" uid="uid://cct5aovywm60s" path="res://mirror.gdshader" id="2_nk6sm"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nk6sm"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nk6sm"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_nk6sm")
+shader_parameter/refl_tx = SubResource("ViewportTexture_nk6sm")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nk6sm"]
+size = Vector2(2, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nk6sm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dx1wu"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+layers = 2
+material_override = SubResource("ShaderMaterial_nk6sm")
+mesh = SubResource("PlaneMesh_nk6sm")
+script = ExtResource("1_scjey")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(1024, 512)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(-2.06632e-07, 0.0361728, -0.999346, 8.99589e-10, 0.999346, 0.0361728, 1, 6.57546e-09, -2.06529e-07, 0.0170288, 0.1, 0)
+cull_mask = 1048573
+current = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewport/Camera3D"]
+visible = false
+mesh = SubResource("BoxMesh_nk6sm")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="SubViewport/Camera3D"]
+transform = Transform3D(1, 4.44089e-16, 0, 0, 1, -4.06722e-16, 0, -4.06722e-16, 1, -8.34465e-08, 0.025321, -0.699542)
+visible = false
+mesh = SubResource("BoxMesh_dx1wu")
+
+[node name="DummyCam" type="Node3D" parent="."]

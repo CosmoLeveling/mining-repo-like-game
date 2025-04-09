@@ -1,6 +1,7 @@
 extends Node3D
 @export var generator : MapGenerator
 func _ready() -> void:
+	Engine.set_physics_ticks_per_second(roundi(DisplayServer.screen_get_refresh_rate()))
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event: InputEvent) -> void:

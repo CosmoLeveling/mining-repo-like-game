@@ -20,7 +20,7 @@ func spawn_drop():
 	if drop.has_node("SellableComponent"):
 		drop.get_node("SellableComponent").cost = randi_range(100,20000)
 	get_parent().add_child(drop)
-	drop.global_position = global_position
+	drop.global_position = global_position+Vector3(0,0.5,0)
 
 func tween_finished():
 	var tween : Tween = create_tween()

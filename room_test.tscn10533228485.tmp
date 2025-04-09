@@ -1,11 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://lh1sln1gx0nl"]
+[gd_scene load_steps=4 format=3 uid="uid://lh1sln1gx0nl"]
 
 [ext_resource type="Script" uid="uid://chr6utriwcqj3" path="res://room.gd" id="1_yq7rk"]
-[ext_resource type="ArrayOccluder3D" uid="uid://bivo8xmxc38v4" path="res://Scenes/room_test.occ" id="4_wi0rs"]
 [ext_resource type="Material" uid="uid://xq7m8egqv2yi" path="res://assets/ground.tres" id="5_65mac"]
 [ext_resource type="PackedScene" uid="uid://c3aib1jhr7r5x" path="res://assets/basic_cave.blend" id="5_p1rem"]
-
-[sub_resource type="FogMaterial" id="FogMaterial_wi0rs"]
 
 [node name="Room" type="Node3D"]
 script = ExtResource("1_yq7rk")
@@ -48,28 +45,5 @@ omni_range = 12.0
 
 [node name="Point_003" parent="basic_cave" index="7"]
 omni_range = 12.0
-
-[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]
-visible = false
-occluder = ExtResource("4_wi0rs")
-
-[node name="FogVolume" type="FogVolume" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0615723, 0)
-size = Vector3(20, 0.276855, 20)
-material = SubResource("FogMaterial_wi0rs")
-
-[node name="OreSpawners" type="Node3D" parent="."]
-
-[node name="Marker3D" type="Marker3D" parent="OreSpawners"]
-transform = Transform3D(0.5833, 0, 0.812257, 0, 1, 0, -0.812257, 0, 0.5833, -6.03424, 0, 5)
-
-[node name="Marker3D2" type="Marker3D" parent="OreSpawners"]
-transform = Transform3D(0.763548, 0, -0.645751, 0, 1, 0, 0.645751, 0, 0.763548, -6.03424, 0, -5)
-
-[node name="Marker3D3" type="Marker3D" parent="OreSpawners"]
-transform = Transform3D(0.288698, 0, -0.95742, 0, 1, 0, 0.95742, 0, 0.288698, 5.96576, 0, 5)
-
-[node name="Marker3D4" type="Marker3D" parent="OreSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96576, 0, -5)
 
 [editable path="basic_cave"]

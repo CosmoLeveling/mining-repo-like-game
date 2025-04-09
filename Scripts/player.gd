@@ -10,12 +10,18 @@ const mouse_sensitivity : float = 0.1
 @onready var head_pivot: Node3D = $CharacterBody3D/HeadPivot
 @onready var interaction: RayCast3D = $CharacterBody3D/HeadPivot/Camera3D/Interaction
 @onready var pickup_location: Marker3D = $CharacterBody3D/HeadPivot/Camera3D/PickupLocation
+@onready var joint = $CharacterBody3D/HeadPivot/Camera3D/Generic6DOFJoint3D
+@onready var staticbody = $CharacterBody3D/HeadPivot/Camera3D/StaticBody3D
+@onready var main_camera: Camera3D = $CharacterBody3D/HeadPivot/Camera3D
+
 
 @onready var movement_input_component : MovementInputComponent = MovementInputComponent.new()
 @export var movement_component : MovementComponent = null
 
 var picked_object : PickupableItem
 var pull_power : int = 4
+var rotation_power : float = 0.05
+var locked : bool = false
 
 func _physics_process(delta: float) -> void:
 	if chara.is_on_floor(): _last_frame_was_on_floor = Engine.get_physics_frames()
@@ -29,7 +35,13 @@ func _physics_process(delta: float) -> void:
 	if picked_object != null:
 		var a = picked_object.global_transform.origin
 		var b = pickup_location.global_transform.origin
-		picked_object.set_linear_velocity((b-a)*pull_power)
+		if picked_object is Cart:
+			b = Vector3(b.x,a.y,b.z)
+			var pull = Vector3((b-a)*pull_power)
+			picked_object.set_linear_velocity(Vector3(pull.x,picked_object.linear_velocity.y,pull.z))
+			picked_object.global_rotation = (Vector3(picked_object.global_rotation.x,head_pivot.global_rotation.y,picked_object.global_rotation.z))
+		else:
+			picked_object.set_linear_velocity((b-a)*pull_power)
 	if not _snap_up_stairs_check(delta):
 		chara.move_and_slide()
 		_snap_down_to_stairs_check()
@@ -43,6 +55,16 @@ func _process(_delta: float) -> void:
 			handle_interact()
 		elif picked_object != null:
 			handle_drop()
+
+func _input(event: InputEvent) -> void:
+	if picked_object!=null:
+		if Input.is_action_pressed("rmouse"):
+			locked = true
+			rotate_object(event)
+		if Input.is_action_just_released("rmouse"):
+			locked = false
+	else:
+		locked = false
 
 func _snap_up_stairs_check(delta) -> bool:
 	if not chara.is_on_floor() and not _snapped_to_stairs_last_frame: return false
@@ -82,10 +104,11 @@ func _snap_down_to_stairs_check() -> void:
 	_snapped_to_stairs_last_frame = did_snap
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		chara.rotate_y(deg_to_rad(-event.relative.x * mouse_sensitivity))
-		head_pivot.rotate_x(deg_to_rad(-event.relative.y * mouse_sensitivity))
-		head_pivot.rotation.x = clamp(head_pivot.rotation.x,deg_to_rad(-80),deg_to_rad(80))
+	if !locked:
+		if event is InputEventMouseMotion:
+			chara.rotate_y(deg_to_rad(-event.relative.x * mouse_sensitivity))
+			head_pivot.rotate_x(deg_to_rad(-event.relative.y * mouse_sensitivity))
+			head_pivot.rotation.x = clamp(head_pivot.rotation.x,deg_to_rad(-80),deg_to_rad(80))
 	
 	movement_component.set_movement_state(movement_input_component.get_sprint_input())
 
@@ -97,6 +120,13 @@ func handle_gravity(delta : float) -> void:
 func handle_drop():
 	if picked_object != null:
 		picked_object = null
+		joint.set_node_b(joint.get_path())
+
+func rotate_object(event):
+	if picked_object != null:
+		if event is InputEventMouseMotion:
+			staticbody.rotate_x(deg_to_rad(event.relative.y * rotation_power))
+			staticbody.rotate_y(deg_to_rad(event.relative.x * rotation_power))
 
 func handle_interact():
 	var collider = interaction.get_collider()
@@ -108,6 +138,8 @@ func handle_interact():
 				var sellable_component: SellableComponent = pickupable_object.get_node("SellableComponent")
 				print("Cost: " + str(sellable_component.cost))
 				print("Rarity: " + str(sellable_component.rarity))
+			if not collider is Cart:
+				joint.set_node_b(picked_object.get_path())
 		elif collider is mineable:
 			var mineable_object : mineable = collider
 			mineable_object.interact()

@@ -8,8 +8,16 @@ var thread: Thread
 @export var room_scenes: Array[PackedScene]  # Preset room scenes
 @export var max_rooms: int = 10
 @export var cart: Cart
+@export var Player:player
+@export var view_dist:float
 
 var placed_rooms = []  # Stores placed rooms
+
+func _process(_delta: float) -> void:
+	for room:RoomInstance in placed_rooms:
+		var node = room.node
+		var dist = node.global_position.distance_to(Player.chara.global_position)
+		node.visible = dist < view_dist
 
 class RoomInstance:
 	var offset: Vector3
@@ -61,7 +69,7 @@ func generate_dungeon():
 					print(str(placed_rooms.size()) + "/" + str(max_rooms))
 					
 	fill_doors()
-	print_debug_map()
+	spawn_ores()
 
 
 func place_first_room(room_scene: PackedScene) -> RoomInstance:
@@ -174,6 +182,15 @@ func fill_doors():
 				var door_fill = door_fill_scene.instantiate()
 				door.add_child(door_fill)
 				door_fill.global_position = door.global_position
+
+func spawn_ores():
+	for room:RoomInstance in placed_rooms:
+		for marker:Marker3D in room.node.get_ores():
+			var new_ore:mineable = preload("res://util/mineable_object.tscn").instantiate()
+			new_ore.max_progress = 10
+			add_child(new_ore)
+			new_ore.global_rotation = marker.global_rotation
+			new_ore.global_position = marker.global_position
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_down"):

@@ -1,25 +1,23 @@
 class_name Cart
-extends RigidBody3D
+extends PickupableItem
+@onready var area_3d: Area3D = $Area3D
+@onready var label_3d: Label3D = $Label3D
 
-
-var current_speed:int = 0
-@export var flipped: bool
-@export var height_adjustment:float = 1
-@onready var label_3d: Label3D = $CollisionShape3D6/Label3D
+func _process(delta: float) -> void:
+	var cost:int = 0
+	for body in area_3d.get_overlapping_bodies():
+		if body.has_node("SellableComponent"):
+			var sellable_comp:SellableComponent = body.get_node("SellableComponent")
+			cost += sellable_comp.cost
+	label_3d.text = str(cost)
 
 func _physics_process(_delta: float) -> void:
-	label_3d.text = str(current_speed)
-	var adjustment_vector:Vector3 = Vector3(0,height_adjustment,0)
-	apply_rotation_towards(global_transform.origin+adjustment_vector,Vector3(0,global_rotation.y,0))
-func apply_rotation_towards(target_position: Vector3, target_global_rotation: Vector3, 
-							 torque_strength: float = 1000.0, damping: float = 100.0, 
-							 move_strength: float = 500.0, move_damping: float = 50.0):
+	apply_rotation_towards(Vector3(0,global_rotation.y,0))
+func apply_rotation_towards(target_global_rotation: Vector3, 
+		torque_strength: float = 1000.0, damping: float = 100.0):
 	var current_quat = Quaternion.from_euler(global_rotation)
 	var target_quat
-	if flipped:
-		target_quat = Quaternion.from_euler(target_global_rotation+Vector3(0,deg_to_rad(180),0))
-	else:
-		target_quat = Quaternion.from_euler(target_global_rotation)
+	target_quat = Quaternion.from_euler(target_global_rotation)
 	var delta_quat = target_quat * current_quat.inverse()
 	
 	if delta_quat.w < 0:
@@ -30,18 +28,3 @@ func apply_rotation_towards(target_position: Vector3, target_global_rotation: Ve
 	
 	var torque = axis * angle * torque_strength - angular_velocity * damping
 	apply_torque(torque)
-	
-	var position_error = target_position - global_transform.origin
-	var velocity_error = linear_velocity
-	var force = position_error * move_strength - velocity_error * move_damping
-	apply_central_force(force)
-
-
-func _on_up_interact() -> void:
-	current_speed += 1
-
-func _on_down_interact() -> void:
-	current_speed -= 1
-
-func _on_switch_interact() -> void:
-	pass

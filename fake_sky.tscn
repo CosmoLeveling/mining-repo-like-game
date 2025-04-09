@@ -1,0 +1,57 @@
+[gd_scene load_steps=10 format=3 uid="uid://b7ytlqu5uf3ux"]
+
+[ext_resource type="Shader" uid="uid://cct5aovywm60s" path="res://mirror.gdshader" id="1_rwnrp"]
+[ext_resource type="Script" uid="uid://3ile14uqp0f2" path="res://fake_sky.gd" id="2_v6hq0"]
+[ext_resource type="Shader" uid="uid://u8fh36mrhk53" path="res://fake_sky.gdshader" id="3_v6hq0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_nxtwd"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_p0pne"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8yam3"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_rwnrp")
+shader_parameter/refl_tx = SubResource("ViewportTexture_p0pne")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_70wur"]
+shader = ExtResource("3_v6hq0")
+shader_parameter/top_color = Color(0.1, 0.6, 1, 1)
+shader_parameter/bottom_color = Color(0.4, 0.8, 1, 1)
+shader_parameter/horizon_color = Color(0, 0.7, 0.8, 1)
+shader_parameter/horizon_blur = 0.05
+shader_parameter/sun_color = Color(10, 8, 1, 1)
+shader_parameter/sun_size = 0.2
+shader_parameter/sun_blur = 10.0
+shader_parameter/clouds_edge_color = Color(0.8, 0.8, 0.98, 1)
+shader_parameter/clouds_main_color = Color(1, 1, 1, 1)
+shader_parameter/clouds_speed = 0.01
+shader_parameter/clouds_scale = 1.0
+shader_parameter/clouds_cutoff = 0.3
+shader_parameter/clouds_weight = 0.0
+shader_parameter/clouds_blur = 0.25
+
+[sub_resource type="Sky" id="Sky_bwyc2"]
+sky_material = SubResource("ShaderMaterial_70wur")
+
+[sub_resource type="Environment" id="Environment_sbikj"]
+background_mode = 2
+sky = SubResource("Sky_bwyc2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" node_paths=PackedStringArray("fake_sky", "camera_3d", "dummy_cam")]
+mesh = SubResource("BoxMesh_nxtwd")
+surface_material_override/0 = SubResource("ShaderMaterial_8yam3")
+script = ExtResource("2_v6hq0")
+fake_sky = NodePath("SubViewport")
+camera_3d = NodePath("SubViewport/Node3D/Camera3D")
+dummy_cam = NodePath("Node3D")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+
+[node name="Node3D" type="Node3D" parent="SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport/Node3D"]
+environment = SubResource("Environment_sbikj")
+
+[node name="Node3D" type="Node3D" parent="."]

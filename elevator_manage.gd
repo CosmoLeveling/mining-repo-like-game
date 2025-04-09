@@ -7,9 +7,9 @@ var min_floor = 0
 
 func _physics_process(_delta: float) -> void:
 	if Floor>0:
-		elevator.progress+=0.1
+		elevator.progress+=1*_delta
 	else:
-		elevator.progress-=0.1
+		elevator.progress-=1*_delta
 func Up():
 	if Floor<max_floor:
 		Floor+=1

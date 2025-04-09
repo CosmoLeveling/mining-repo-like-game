@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://rid0w54pl5v3"]
+[gd_scene load_steps=16 format=3 uid="uid://rid0w54pl5v3"]
 
 [ext_resource type="Script" uid="uid://ooheeo86w4ki" path="res://Scripts/test_world.gd" id="1_d8k14"]
 [ext_resource type="PackedScene" uid="uid://cejyqytnh2ka4" path="res://map_generation.tscn" id="1_htxwe"]
@@ -11,11 +11,11 @@
 [ext_resource type="PackedScene" uid="uid://ckh8gfjr8x6pt" path="res://room_up.tscn" id="5_qque5"]
 [ext_resource type="PackedScene" uid="uid://balqqg5ec3qo" path="res://assets/drill.blend" id="10_wv5m1"]
 
-[sub_resource type="Sky" id="Sky_nxtwd"]
+[sub_resource type="Sky" id="Sky_aljjk"]
 
 [sub_resource type="Environment" id="Environment_rkgl4"]
 background_mode = 1
-sky = SubResource("Sky_nxtwd")
+sky = SubResource("Sky_aljjk")
 ambient_light_energy = 0.0
 tonemap_mode = 2
 ssil_enabled = true
@@ -37,6 +37,18 @@ volumetric_fog_emission_energy = 0.1
 volumetric_fog_length = 128.0
 volumetric_fog_sky_affect = 0.0
 adjustment_enabled = true
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wv5m1"]
+sky_top_color = Color(0.284548, 0.407164, 0.838657, 1)
+sky_horizon_color = Color(0.557867, 0.666324, 0.916863, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_nxtwd"]
+sky_material = SubResource("ProceduralSkyMaterial_wv5m1")
+
+[sub_resource type="Environment" id="Environment_mhgcs"]
+background_mode = 2
+sky = SubResource("Sky_nxtwd")
 
 [node name="Node3D" type="Node3D" node_paths=PackedStringArray("generator")]
 script = ExtResource("1_d8k14")
@@ -60,7 +72,7 @@ Player = NodePath("../Node3D")
 view_dist = 50.0
 
 [node name="RigidBody3D" parent="." instance=ExtResource("4_2ub1q")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.0633, 1.77111, -0.0321426)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.361, 1.77111, -0.0321426)
 
 [node name="drill" parent="." instance=ExtResource("10_wv5m1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
@@ -85,3 +97,13 @@ omni_range = 15.0364
 
 [node name="Node3D" parent="." instance=ExtResource("2_d8k14")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.62179, 3.59709, 0)
+
+[node name="SubViewport" type="SubViewport" parent="."]
+
+[node name="Node3D" type="Node3D" parent="SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport/Node3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+cull_mask = 1048574
+environment = SubResource("Environment_mhgcs")
+projection = 1
