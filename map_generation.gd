@@ -1,6 +1,10 @@
 class_name MapGenerator
 extends Node3D
-
+signal gen_next
+var thread: Thread
+@export var debug: bool
+@export var start_scene: PackedScene
+@export var door_fill_scene: PackedScene
 @export var room_scenes: Array[PackedScene]  # Preset room scenes
 @export var max_rooms: int = 10
 @export var cart: Cart
@@ -8,7 +12,7 @@ extends Node3D
 var placed_rooms = []  # Stores placed rooms
 
 class RoomInstance:
-	var vert: int
+	var offset: Vector3
 	var node: Node3D
 	var position: Vector3
 	var size: Vector3  # Width, height, depth
@@ -17,7 +21,7 @@ class RoomInstance:
 	func _init(n: Room, room_size: Vector3):
 		node = n
 		position = n.global_transform.origin
-		vert = n.vert_offset
+		offset = n.offset
 		size = room_size
 		doors = []
 		var door_container = n.find_child("Doors")
@@ -37,7 +41,7 @@ func generate_dungeon():
 		return
 
 	# Place first room at (0, 0, 0)
-	var root_room = place_first_room(room_scenes.pick_random())
+	var root_room = place_first_room(start_scene)
 	if not root_room:
 		return
 	
@@ -47,13 +51,17 @@ func generate_dungeon():
 		var rand = randi_range(0,room_queue.size()-1)
 		var current_room = room_queue.pop_at(rand)
 		for existing_door in current_room.doors:
+			if (debug):
+				await gen_next
 			if placed_rooms.size() < max_rooms:
 				var new_room_scene = room_scenes.pick_random()
-				var new_room_instance = try_place_room(existing_door, new_room_scene)
+				var new_room_instance = await try_place_room(existing_door, new_room_scene)
 				if new_room_instance:
 					room_queue.append(new_room_instance)
 					print(str(placed_rooms.size()) + "/" + str(max_rooms))
 					
+	fill_doors()
+	print_debug_map()
 
 
 func place_first_room(room_scene: PackedScene) -> RoomInstance:
@@ -67,16 +75,7 @@ func place_first_room(room_scene: PackedScene) -> RoomInstance:
 	var room_data = RoomInstance.new(room, size)
 	placed_rooms.append(room_data)
 	print(str(placed_rooms.size()) + "/" + str(max_rooms))
-	update_rails(room)
 	return room_data
-
-func update_rails(start:Room):
-	var follower:TrackFollower = TrackFollower.new()
-	follower.loop = false
-	follower.cart = cart
-	start.railHandler.Rails.pick_random().add_child(follower)
-	cart.point = follower
-
 func try_place_room(existing_door_transform: Transform3D, room_scene: PackedScene) -> RoomInstance:
 	var rotations = [0, 90, 180, 270]
 	for angle in rotations:
@@ -89,7 +88,9 @@ func try_place_room(existing_door_transform: Transform3D, room_scene: PackedScen
 		# Get room size
 		var size = get_room_size(new_room)
 		# Find a door that aligns
-		for new_door in new_room.find_child("Doors").get_children():
+		for new_door_num in new_room.find_child("Doors").get_children().size():
+			var rand: int = randi_range(1,new_room.find_child("Doors").get_children().size()-new_door_num)
+			var new_door = new_room.find_child("Doors").get_children().get(rand-1)
 			var _new_door_transform = new_door.global_transform
 
 			# Rotate door position properly
@@ -106,7 +107,7 @@ func try_place_room(existing_door_transform: Transform3D, room_scene: PackedScen
 
 				# Validate placement using room size
 				var room_data = RoomInstance.new(new_room, size)
-				if is_valid_position(room_data):
+				if await is_valid_position(room_data):
 					
 					placed_rooms.append(room_data)
 					return room_data  # Successfully placed
@@ -125,23 +126,55 @@ func get_room_size(room: Room) -> Vector3:
 func is_valid_position(room_data: RoomInstance) -> bool:
 	# Add a buffer to avoid false overlap due to floating-point precision
 	for placed_room in placed_rooms:
-		if aabb_collision_check(placed_room, room_data):
+		if await aabb_collision_check(placed_room, room_data):
 			return false  # Prevent overlapping
 	return true
 
 # Check if two rooms are colliding using AABB with rotation support.
 func aabb_collision_check(room1: RoomInstance, room2: RoomInstance) -> bool:
-	var aabb:AABB = AABB(room1.position + Vector3(0,room1.vert,0),room1.size-Vector3(0.00001,0.00001,0.00001))
-	var aabb2:AABB = AABB(room2.position + Vector3(0,room1.vert,0),room2.size-Vector3(0.00001,0.00001,0.00001))
+	var box1_min:Vector3 = get_box_min(room1.position+room1.offset,room1.size-Vector3(0.00001,0.00001,0.00001))
+	var box2_min:Vector3 = get_box_min(room2.position+room2.offset,room2.size-Vector3(0.00001,0.00001,0.00001))
+	var box1_max:Vector3 = get_box_max(room1.position+room1.offset,room1.size-Vector3(0.00001,0.00001,0.00001))
+	var box2_max:Vector3 = get_box_max(room2.position+room2.offset,room2.size-Vector3(0.00001,0.00001,0.00001))
+	if (debug):
+		await  gen_next
+	return (
+		box1_min.x <= box2_max.x && box1_max.x >= box2_min.x\
+		&& box1_min.y <= box2_max.y && box1_max.y >= box2_min.y\
+		&& box1_min.z <= box2_max.z && box1_max.z >= box2_min.z
+ 	);
 
-	# Check if bounding boxes overlap in all axes
-	return aabb.intersects(aabb2)
-
+func get_box_min(corner_pos,size) -> Vector3:
+	return corner_pos - (size*.5)
+func get_box_max(corner_pos,size) -> Vector3:
+	return corner_pos + (size*.5)
 func print_debug_map():
 	for room in placed_rooms:
-		print("Room at ", room.position, " size: ", room.size, " rotation Y: ", rad_to_deg(room.node.rotation.y))
+		print("Room:")
+		print("  Room at ", room.position, " size: ", room.size, " rotation Y: ", rad_to_deg(room.node.rotation.y))
+		print("  Doors for room:")
 		for door in room.doors:
-			print("  Door at ", door.origin)
+			print("    Door at ", door.origin)
 
 func _ready():
 	generate_dungeon()
+
+func fill_doors():
+	for room:RoomInstance in placed_rooms:
+		for door_e in room.node.get_doors():
+			var door:Marker3D = door_e.get("node")
+			var connected = false
+			for room_2:RoomInstance in placed_rooms:
+				if room_2!=room:
+					for door2_e in room_2.node.get_doors():
+						var door2:Marker3D = door2_e.get("node")
+						if(door.global_position.distance_to(door2.global_position) <=0.01):
+							connected = true
+			if !connected:
+				var door_fill = door_fill_scene.instantiate()
+				door.add_child(door_fill)
+				door_fill.global_position = door.global_position
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_down"):
+		gen_next.emit()

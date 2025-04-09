@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://d2qeo6xkigp4i"]
+
+[ext_resource type="Script" uid="uid://dwx8n115g6hdl" path="res://object_placement.gd" id="1_37kl0"]
+[ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/player.tscn" id="2_8uh7m"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_37kl0"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_8uh7m"]
+sky_material = SubResource("ProceduralSkyMaterial_37kl0")
+
+[sub_resource type="Environment" id="Environment_6uqi0"]
+background_mode = 2
+sky = SubResource("Sky_8uh7m")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_37kl0")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6uqi0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(10, 0.1, 10)
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(50, 50, -50, 50, -50, -50, 50, -50)
+uv = PackedVector2Array(-207.5, 5.5, 30.5, -51.5, 51.5, 54.5, -181.5, 97.5)
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_8uh7m")]

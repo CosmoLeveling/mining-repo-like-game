@@ -1,0 +1,98 @@
+[gd_scene load_steps=16 format=3 uid="uid://rid0w54pl5v3"]
+
+[ext_resource type="Script" uid="uid://ooheeo86w4ki" path="res://Scripts/test_world.gd" id="1_d8k14"]
+[ext_resource type="PackedScene" uid="uid://cejyqytnh2ka4" path="res://map_generation.tscn" id="1_htxwe"]
+[ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/player.tscn" id="2_d8k14"]
+[ext_resource type="PackedScene" uid="uid://lh1sln1gx0nl" path="res://room_test.tscn" id="3_aljjk"]
+[ext_resource type="PackedScene" uid="uid://bwlgh0ke3kkmo" path="res://start_room.tscn" id="3_h8v45"]
+[ext_resource type="Script" uid="uid://dm6cdtuu3kl8t" path="res://components/movement_component.gd" id="3_wv5m1"]
+[ext_resource type="PackedScene" uid="uid://dpci6e7r2lk3g" path="res://cart.tscn" id="4_2ub1q"]
+[ext_resource type="PackedScene" uid="uid://doopt0ggbblwg" path="res://assets/cave_wall.blend" id="4_pel01"]
+[ext_resource type="PackedScene" uid="uid://d0vhyns8o2yp4" path="res://room_test_two.tscn" id="4_rkgl4"]
+[ext_resource type="PackedScene" uid="uid://ckh8gfjr8x6pt" path="res://room_up.tscn" id="5_qque5"]
+[ext_resource type="Script" uid="uid://cc3sm58yn1jth" path="res://marker_3d.gd" id="8_pel01"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h8v45"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 45
+corner_radius_top_right = 45
+corner_radius_bottom_right = 45
+corner_radius_bottom_left = 45
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ub1q"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_aljjk"]
+sky_material = SubResource("ProceduralSkyMaterial_2ub1q")
+
+[sub_resource type="Environment" id="Environment_rkgl4"]
+background_mode = 2
+sky = SubResource("Sky_aljjk")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("generator")]
+script = ExtResource("1_d8k14")
+generator = NodePath("MapGeneration")
+
+[node name="CharacterBody3D2" type="CharacterBody3D" parent="." node_paths=PackedStringArray("movement_component")]
+script = ExtResource("8_pel01")
+movement_component = NodePath("MovementComponent")
+
+[node name="MovementComponent" type="Node" parent="CharacterBody3D2"]
+script = ExtResource("3_wv5m1")
+metadata/_custom_type_script = "uid://dm6cdtuu3kl8t"
+
+[node name="HeadPivot" type="Node3D" parent="CharacterBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D2/HeadPivot"]
+
+[node name="Interaction" type="RayCast3D" parent="CharacterBody3D2/HeadPivot/Camera3D"]
+target_position = Vector3(0, 0, -5)
+collide_with_areas = true
+
+[node name="PickupLocation" type="Marker3D" parent="CharacterBody3D2/HeadPivot/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.64055)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="CharacterBody3D2"]
+
+[node name="Panel" type="Panel" parent="CharacterBody3D2/CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.5
+offset_top = -2.5
+offset_right = 2.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_h8v45")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rkgl4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MapGeneration" parent="." node_paths=PackedStringArray("cart") instance=ExtResource("1_htxwe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.53674e-07, -4.76837e-07, -1.90735e-06)
+start_scene = ExtResource("3_h8v45")
+door_fill_scene = ExtResource("4_pel01")
+room_scenes = Array[PackedScene]([ExtResource("3_aljjk"), ExtResource("4_rkgl4"), ExtResource("5_qque5")])
+max_rooms = 50
+cart = NodePath("../RigidBody3D")
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_d8k14")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 2.3925, 0)
+
+[node name="RigidBody3D" parent="." instance=ExtResource("4_2ub1q")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6.97197, 1.77111, -0.0321426)
+height_adjustment = 0.5

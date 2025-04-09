@@ -37,6 +37,6 @@ func handle_acceleration(entity : CharacterBody3D, target_dir : Vector2) -> void
 		entity.velocity.x = move_toward(entity.velocity.x, 0, current_speed)
 		entity.velocity.z = move_toward(entity.velocity.z, 0, current_speed)
 
-func handle_jump(entity : CharacterBody3D, is_jumping : bool) -> void:
-	if is_jumping and entity.is_on_floor():
-		entity.velocity.y = jump_height
+func handle_jump(entity : player, is_jumping : bool) -> void:
+	if is_jumping and (entity.chara.is_on_floor() or entity._snapped_to_stairs_last_frame):
+		entity.chara.velocity.y = jump_height

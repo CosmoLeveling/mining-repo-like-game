@@ -11,12 +11,17 @@ config_version=5
 [application]
 
 config/name="MIning Repo Like Game"
+run/main_scene="uid://rid0w54pl5v3"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
+window/size/viewport_width=860
+window/size/viewport_height=520
 window/size/mode=3
+window/stretch/mode="viewport"
+window/stretch/aspect="ignore"
 
 [editor_plugins]
 

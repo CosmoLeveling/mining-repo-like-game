@@ -1,36 +1,91 @@
-[gd_scene load_steps=5 format=3 uid="uid://6tb12758d8ad"]
+[gd_scene load_steps=8 format=3 uid="uid://6tb12758d8ad"]
 
 [ext_resource type="Script" uid="uid://bkp145ek1h6jr" path="res://Scripts/player.gd" id="1_v0iea"]
+[ext_resource type="Shader" uid="uid://c4glneiual5ui" path="res://Scenes/player.gdshader" id="2_6t5aa"]
 [ext_resource type="Script" uid="uid://dm6cdtuu3kl8t" path="res://components/movement_component.gd" id="2_cvnsp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cvnsp"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvnsp"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 45
+corner_radius_top_right = 45
+corner_radius_bottom_right = 45
+corner_radius_bottom_left = 45
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6t5aa"]
+shader = ExtResource("2_6t5aa")
+shader_parameter/steps = 50.0
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_cvnsp"]
 
-[node name="CharacterBody3D" type="CharacterBody3D" node_paths=PackedStringArray("movement_component")]
+[node name="Player" type="Node3D" node_paths=PackedStringArray("movement_component")]
 script = ExtResource("1_v0iea")
 movement_component = NodePath("MovementComponent")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_cvnsp")
+
+[node name="StairsAheadRaycast3D" type="RayCast3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.852)
+target_position = Vector3(0, -0.65, 0)
+
+[node name="StairsBelowRaycast3d" type="RayCast3D" parent="CharacterBody3D"]
+target_position = Vector3(0, -0.85, 0)
+
+[node name="HeadPivot" type="Node3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/HeadPivot"]
+
+[node name="Interaction" type="RayCast3D" parent="CharacterBody3D/HeadPivot/Camera3D"]
+target_position = Vector3(0, 0, -5)
+collide_with_areas = true
+
+[node name="PickupLocation" type="Marker3D" parent="CharacterBody3D/HeadPivot/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.64055)
+
+[node name="CameraSmooth" type="Node3D" parent="CharacterBody3D/HeadPivot"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.5
+offset_top = -2.5
+offset_right = 2.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_cvnsp")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_6t5aa")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_cvnsp")
+skeleton = NodePath("../../CharacterBody3D")
 
 [node name="MovementComponent" type="Node" parent="."]
 script = ExtResource("2_cvnsp")
 metadata/_custom_type_script = "uid://dm6cdtuu3kl8t"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_cvnsp")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_cvnsp")
-
-[node name="HeadPivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-
-[node name="Camera3D" type="Camera3D" parent="HeadPivot"]
-
-[node name="Interaction" type="RayCast3D" parent="HeadPivot/Camera3D"]
-target_position = Vector3(0, 0, -5)
-collide_with_areas = true
-
-[node name="PickupLocation" type="Marker3D" parent="HeadPivot/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.64055)

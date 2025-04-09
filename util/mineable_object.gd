@@ -18,7 +18,7 @@ func interact():
 func spawn_drop():
 	var drop = drop_scene.instantiate()
 	if drop.has_node("SellableComponent"):
-		drop.get_node("SellableComponent").cost = randi_range(100,200000)
+		drop.get_node("SellableComponent").cost = randi_range(100,20000)
 	get_parent().add_child(drop)
 	drop.global_position = global_position
 

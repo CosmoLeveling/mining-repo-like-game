@@ -1,15 +1,19 @@
-[gd_scene load_steps=11 format=3 uid="uid://rid0w54pl5v3"]
+[gd_scene load_steps=14 format=3 uid="uid://rid0w54pl5v3"]
 
 [ext_resource type="Script" uid="uid://ooheeo86w4ki" path="res://Scripts/test_world.gd" id="1_d8k14"]
 [ext_resource type="PackedScene" uid="uid://cejyqytnh2ka4" path="res://map_generation.tscn" id="1_htxwe"]
 [ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/player.tscn" id="2_d8k14"]
 [ext_resource type="PackedScene" uid="uid://lh1sln1gx0nl" path="res://room_test.tscn" id="3_aljjk"]
+[ext_resource type="PackedScene" uid="uid://bwlgh0ke3kkmo" path="res://start_room.tscn" id="3_h8v45"]
 [ext_resource type="PackedScene" uid="uid://dpci6e7r2lk3g" path="res://cart.tscn" id="4_2ub1q"]
+[ext_resource type="PackedScene" uid="uid://doopt0ggbblwg" path="res://assets/cave_wall.blend" id="4_pel01"]
 [ext_resource type="PackedScene" uid="uid://d0vhyns8o2yp4" path="res://room_test_two.tscn" id="4_rkgl4"]
 [ext_resource type="PackedScene" uid="uid://ckh8gfjr8x6pt" path="res://room_up.tscn" id="5_qque5"]
+[ext_resource type="PackedScene" uid="uid://balqqg5ec3qo" path="res://assets/drill.blend" id="10_wv5m1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ub1q"]
-sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+sky_top_color = Color(0.284548, 0.407164, 0.838657, 1)
+sky_horizon_color = Color(0.557867, 0.666324, 0.916863, 1)
 ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 
 [sub_resource type="Sky" id="Sky_aljjk"]
@@ -19,7 +23,21 @@ sky_material = SubResource("ProceduralSkyMaterial_2ub1q")
 background_mode = 2
 sky = SubResource("Sky_aljjk")
 tonemap_mode = 2
+ssil_enabled = true
+sdfgi_enabled = true
 glow_enabled = true
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/4 = 1.0
+glow_levels/6 = 1.0
+glow_levels/7 = 1.0
+fog_enabled = true
+fog_light_energy = 0.15
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.025
+volumetric_fog_albedo = Color(0.293846, 0.333836, 0.470605, 1)
+volumetric_fog_sky_affect = 0.0
 
 [node name="Node3D" type="Node3D" node_paths=PackedStringArray("generator")]
 script = ExtResource("1_d8k14")
@@ -34,12 +52,36 @@ shadow_enabled = true
 
 [node name="MapGeneration" parent="." node_paths=PackedStringArray("cart") instance=ExtResource("1_htxwe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.53674e-07, -4.76837e-07, -1.90735e-06)
-room_scenes = Array[PackedScene]([ExtResource("3_aljjk"), ExtResource("5_qque5"), ExtResource("4_rkgl4")])
-max_rooms = 20
+start_scene = ExtResource("3_h8v45")
+door_fill_scene = ExtResource("4_pel01")
+room_scenes = Array[PackedScene]([ExtResource("5_qque5"), ExtResource("4_rkgl4"), ExtResource("3_aljjk")])
+max_rooms = 50
 cart = NodePath("../RigidBody3D")
 
-[node name="CharacterBody3D" parent="." instance=ExtResource("2_d8k14")]
-
 [node name="RigidBody3D" parent="." instance=ExtResource("4_2ub1q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00930786, 3.65199, -0.0321426)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.361, 1.77111, -0.0321426)
 height_adjustment = 0.5
+
+[node name="drill" parent="." instance=ExtResource("10_wv5m1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.760859, 11.4146, 0)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+omni_range = 15.0364
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.00376, 13.3515, -0.0363073)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+omni_range = 15.0364
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.00376, 9.13457, -0.0363073)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+omni_range = 15.0364
+
+[node name="Node3D" parent="." instance=ExtResource("2_d8k14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.62179, 3.59709, 0)

@@ -5,14 +5,12 @@ extends RigidBody3D
 var current_speed:int = 0
 @export var flipped: bool
 @export var height_adjustment:float = 1
-@export var point: TrackFollower
 @onready var label_3d: Label3D = $CollisionShape3D6/Label3D
 
 func _physics_process(_delta: float) -> void:
 	label_3d.text = str(current_speed)
-	if point:
-		var adjustment_vector:Vector3 = Vector3(0,height_adjustment,0)
-		apply_rotation_towards(point.global_transform.origin+adjustment_vector,point.global_rotation)
+	var adjustment_vector:Vector3 = Vector3(0,height_adjustment,0)
+	apply_rotation_towards(global_transform.origin+adjustment_vector,Vector3(0,global_rotation.y,0))
 func apply_rotation_towards(target_position: Vector3, target_global_rotation: Vector3, 
 							 torque_strength: float = 1000.0, damping: float = 100.0, 
 							 move_strength: float = 500.0, move_damping: float = 50.0):

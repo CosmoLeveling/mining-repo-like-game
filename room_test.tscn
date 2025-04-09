@@ -36,7 +36,7 @@ point_count = 2
 
 [node name="Room" type="Node3D" node_paths=PackedStringArray("railHandler")]
 script = ExtResource("1_yq7rk")
-vert_offset = 4
+offset = Vector3(0, 4, 0)
 railHandler = NodePath("RailHandler")
 size = Vector3(20, 9, 20)
 
@@ -85,7 +85,7 @@ metadata/_custom_type_script = "uid://cusm76pnm4tdq"
 
 [node name="basic_cave" parent="." instance=ExtResource("5_p1rem")]
 
-[node name="Dome" parent="basic_cave" index="0"]
+[node name="Dome" parent="basic_cave" index="1"]
 surface_material_override/1 = ExtResource("5_65mac")
 
 [node name="CollisionShape3D" parent="basic_cave/Dome/StaticBody3D" index="0"]
@@ -93,5 +93,17 @@ visible = false
 
 [node name="CollisionShape3D" parent="basic_cave/Dome_001/StaticBody3D" index="0"]
 visible = false
+
+[node name="Point" parent="basic_cave" index="4"]
+omni_range = 12.0
+
+[node name="Point_001" parent="basic_cave" index="5"]
+omni_range = 12.0
+
+[node name="Point_002" parent="basic_cave" index="6"]
+omni_range = 12.0
+
+[node name="Point_003" parent="basic_cave" index="7"]
+omni_range = 12.0
 
 [editable path="basic_cave"]
