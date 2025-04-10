@@ -1,0 +1,141 @@
+[gd_scene load_steps=16 format=3 uid="uid://dpg1y442ryxqx"]
+
+[ext_resource type="Script" uid="uid://ooheeo86w4ki" path="res://util/test_world.gd" id="1_707cn"]
+[ext_resource type="Texture2D" uid="uid://c8mgw3cqj03v6" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="1_au00k"]
+[ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/features/player.tscn" id="2_707cn"]
+[ext_resource type="PackedScene" uid="uid://b66hf2wr4wewb" path="res://Scenes/features/item_test.tscn" id="4_iwv7r"]
+[ext_resource type="PackedScene" uid="uid://plsd1428j51r" path="res://util/objects/mineable_object.tscn" id="5_iwv7r"]
+[ext_resource type="PackedScene" uid="uid://dygwtfjaj5tot" path="res://util/features/sell_platform.tscn" id="6_kt01x"]
+[ext_resource type="PackedScene" uid="uid://meehnbkm300d" path="res://Scenes/shader_related/mirror.tscn" id="8_0fcji"]
+[ext_resource type="PackedScene" uid="uid://dpci6e7r2lk3g" path="res://Scenes/features/cart.tscn" id="9_dqfvb"]
+[ext_resource type="Shader" uid="uid://cct5aovywm60s" path="res://assets/shaders/mirror.gdshader" id="9_yrarp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mq1bj"]
+albedo_texture = ExtResource("1_au00k")
+uv1_triplanar = true
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_dqfvb"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yrarp"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("9_yrarp")
+shader_parameter/refl_tx = SubResource("ViewportTexture_dqfvb")
+
+[sub_resource type="BoxMesh" id="BoxMesh_dqfvb"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="Sky" id="Sky_aljjk"]
+
+[sub_resource type="Environment" id="Environment_dqfvb"]
+background_mode = 1
+sky = SubResource("Sky_aljjk")
+ambient_light_energy = 0.0
+tonemap_mode = 2
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/4 = 1.0
+glow_levels/6 = 1.0
+glow_levels/7 = 1.0
+fog_enabled = true
+fog_light_energy = 0.15
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.025
+volumetric_fog_albedo = Color(0.293846, 0.333836, 0.470605, 1)
+volumetric_fog_emission = Color(1.58831e-06, 0, 0.617782, 1)
+volumetric_fog_emission_energy = 0.1
+volumetric_fog_length = 128.0
+volumetric_fog_sky_affect = 0.0
+adjustment_enabled = true
+
+[node name="test_world" type="Node3D"]
+script = ExtResource("1_707cn")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+use_collision = true
+size = Vector3(100, 2, 100)
+material = SubResource("StandardMaterial3D_mq1bj")
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_707cn")]
+
+[node name="PickupableItem" parent="." instance=ExtResource("4_iwv7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.380749, -8.84468)
+
+[node name="SellPlatform" parent="." instance=ExtResource("6_kt01x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.3956)
+
+[node name="Cart" parent="." instance=ExtResource("9_dqfvb")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.0185924, 1.50774, 15.6125)
+continuous_cd = true
+
+[node name="Mineables" type="Node3D" parent="."]
+
+[node name="mineable_object" parent="Mineables" instance=ExtResource("5_iwv7r")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.98884, 0.5, 7.82778)
+max_progress = 10
+
+[node name="mineable_object2" parent="Mineables" instance=ExtResource("5_iwv7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.244906, 0.5, -5.47263)
+max_progress = 10
+
+[node name="mineable_object3" parent="Mineables" instance=ExtResource("5_iwv7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.88423, 0.5, 0.99735)
+max_progress = 10
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.46584, 0.2, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.96584, 0.7, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.46584, 1.2, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96584, 1.7, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.46584, 2.2, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.96584, 2.7, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.46584, 3.2, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96584, 3.7, 0)
+use_collision = true
+size = Vector3(1, 0.5, 1)
+
+[node name="Mirror" parent="." instance=ExtResource("8_0fcji")]
+transform = Transform3D(1, 4.37114e-08, 5.51715e-37, 3.55271e-15, 1.91069e-15, -1, -4.37114e-08, 1, 3.55271e-15, 0, 1.7, -1)
+material_override = SubResource("ShaderMaterial_yrarp")
+mesh = SubResource("BoxMesh_dqfvb")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dqfvb")
