@@ -1,0 +1,180 @@
+[gd_scene load_steps=13 format=3 uid="uid://b7y7mhmoccqyj"]
+
+[ext_resource type="Script" uid="uid://de78qwfa24bij" path="res://Scenes/main_scenes/team_hub.gd" id="1_py421"]
+[ext_resource type="PackedScene" uid="uid://di4xgcor6bcvj" path="res://Scenes/assets/drill.tscn" id="1_rup8j"]
+[ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/features/player.tscn" id="2_q4g28"]
+[ext_resource type="PackedScene" uid="uid://p82u41a4pygg" path="res://assets/blender/team_hub.blend" id="4_7cswt"]
+[ext_resource type="Shader" uid="uid://ew3sydfn3tyy" path="res://assets/shaders/vhs_spacial.gdshader" id="5_qdwk1"]
+[ext_resource type="Shader" uid="uid://dmwg4i6q83uwi" path="res://assets/shaders/vhs.gdshader" id="6_mf5o6"]
+
+[sub_resource type="Sky" id="Sky_wv5m1"]
+
+[sub_resource type="Environment" id="Environment_7cswt"]
+background_mode = 1
+sky = SubResource("Sky_wv5m1")
+ambient_light_energy = 0.0
+tonemap_mode = 2
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/4 = 1.0
+glow_levels/6 = 1.0
+glow_levels/7 = 1.0
+fog_enabled = true
+fog_light_energy = 0.15
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.025
+volumetric_fog_albedo = Color(0.293846, 0.333836, 0.470605, 1)
+volumetric_fog_emission = Color(1.58831e-06, 0, 0.617782, 1)
+volumetric_fog_emission_energy = 0.1
+volumetric_fog_length = 128.0
+adjustment_enabled = true
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5qovm"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mf5o6"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("5_qdwk1")
+shader_parameter/screen_texture = SubResource("ViewportTexture_5qovm")
+
+[sub_resource type="QuadMesh" id="QuadMesh_5qovm"]
+size = Vector2(17, 15)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xwkde"]
+shader = ExtResource("6_mf5o6")
+shader_parameter/overlay = false
+shader_parameter/scanlines_opacity = 0.4
+shader_parameter/scanlines_width = 0.25
+shader_parameter/grille_opacity = 0.3
+shader_parameter/resolution = Vector2(640, 480)
+shader_parameter/pixelate = true
+shader_parameter/roll = false
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 0.0
+shader_parameter/roll_variation = 0.1
+shader_parameter/distort_intensity = 0.05
+shader_parameter/noise_opacity = 0.4
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.06
+shader_parameter/aberration = 0.03
+shader_parameter/brightness = 1.4
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.0
+shader_parameter/clip_warp = true
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/vignette_opacity = 0.5
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_py421")
+
+[node name="Node3D" parent="." instance=ExtResource("1_rup8j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+open = false
+
+[node name="Player" parent="." instance=ExtResource("2_q4g28")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7761, 2.97834, 0)
+
+[node name="team_hub" parent="." instance=ExtResource("4_7cswt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7cswt")
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.0747, 16.4303, -0.0363073)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+omni_range = 42.8967
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -37.645, 9.86686, 0)
+material_override = SubResource("ShaderMaterial_mf5o6")
+mesh = SubResource("QuadMesh_5qovm")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(640, 480)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="SubViewport"]
+
+[node name="Control" type="Control" parent="SubViewport/CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="SubViewport/CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SubViewport/CanvasLayer/Control/ColorRect2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="SubViewport/CanvasLayer/Control/ColorRect2/VBoxContainer2"]
+layout_mode = 2
+text = "
+
+JOBS
+____________________________________________________________________________________________________________________________________________"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewport/CanvasLayer/Control/ColorRect2/VBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewport/CanvasLayer/Control/ColorRect2/VBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 65.925)
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="SubViewport/CanvasLayer/Control/ColorRect2/VBoxContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="SubViewport/CanvasLayer/Control/ColorRect2/VBoxContainer2/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(565.875, 41.45)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="SubViewport/CanvasLayer/Control/ColorRect2/VBoxContainer2/VBoxContainer/HBoxContainer/Panel"]
+custom_minimum_size = Vector2(127.86, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 44.0
+grow_vertical = 2
+text = "TEST"
+
+[node name="Control" type="Control" parent="SubViewport/CanvasLayer/Control/ColorRect2/VBoxContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="SubViewport/CanvasLayer/Control"]
+material = SubResource("ShaderMaterial_xwkde")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.00376, 13.3515, -0.0363073)
+light_color = Color(0.792931, 0.723117, 0.559374, 1)
+light_energy = 11.767
+omni_range = 15.0364
+
+[connection signal="button_clicked" from="Node3D" to="." method="_on_node_3d_button_clicked"]

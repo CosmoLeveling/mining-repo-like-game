@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://04i15e30pltm"]
 
 [ext_resource type="Script" uid="uid://d0106ru16swsb" path="res://Scripts/gui/game_choose_menu.gd" id="1_nlxf7"]
+[ext_resource type="PackedScene" uid="uid://bnqohi6mq2o14" path="res://Scenes/gui/Template/SaveTemplate.tscn" id="2_awayp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nlxf7"]
 bg_color = Color(0.133196, 0.133196, 0.133196, 1)
@@ -14,18 +15,6 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ovckv"]
-bg_color = Color(0.168627, 0.164706, 0.168627, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.0383972, 0.0383972, 0.0383971, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
 [node name="GameChooseMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -34,6 +23,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nlxf7")
+save_scene = ExtResource("2_awayp")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -68,15 +58,13 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="SaveParent" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel" type="Panel" parent="MarginContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="Panel" parent="MarginContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/SaveParent" instance=ExtResource("2_awayp")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ovckv")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36.635)

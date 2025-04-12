@@ -3,9 +3,13 @@
 [ext_resource type="Script" uid="uid://bkp145ek1h6jr" path="res://Scripts/features/player.gd" id="1_v0iea"]
 [ext_resource type="Shader" uid="uid://c4glneiual5ui" path="res://assets/shaders/player.gdshader" id="2_6t5aa"]
 [ext_resource type="Script" uid="uid://dm6cdtuu3kl8t" path="res://components/movement_component.gd" id="2_cvnsp"]
-[ext_resource type="Script" uid="uid://6ts13526b510" path="res://util/debug/fps.gd" id="3_vgqql"]
+[ext_resource type="PackedScene" uid="uid://yc3djdiijlqv" path="res://assets/blender/player_model.blend" id="3_rf7au"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cvnsp"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_rf7au"]
+radius = 0.41
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l2o1h"]
+height = 1.88037
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvnsp"]
 bg_color = Color(1, 1, 1, 1)
@@ -18,8 +22,6 @@ corner_radius_bottom_left = 45
 shader = ExtResource("2_6t5aa")
 shader_parameter/steps = 50.0
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_cvnsp"]
-
 [node name="Player" type="Node3D" node_paths=PackedStringArray("movement_component")]
 script = ExtResource("1_v0iea")
 movement_component = NodePath("MovementComponent")
@@ -27,19 +29,23 @@ movement_component = NodePath("MovementComponent")
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("SphereShape3D_rf7au")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_cvnsp")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.941605, 0)
+shape = SubResource("CapsuleShape3D_l2o1h")
 
 [node name="StairsAheadRaycast3D" type="RayCast3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.852)
-target_position = Vector3(0, -0.65, 0)
+target_position = Vector3(0, -0.75, 0)
 
 [node name="StairsBelowRaycast3d" type="RayCast3D" parent="CharacterBody3D"]
-target_position = Vector3(0, -0.85, 0)
+target_position = Vector3(0, -0.95, 0)
 
 [node name="HeadPivot" type="Node3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/HeadPivot"]
 
@@ -70,6 +76,11 @@ spot_angle_attenuation = 3.0
 
 [node name="CameraSmooth" type="Node3D" parent="CharacterBody3D/HeadPivot"]
 
+[node name="CartPickupLocation" type="Marker3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.64055)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Panel" type="Panel" parent="CanvasLayer"]
@@ -98,17 +109,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 23.0
-script = ExtResource("3_vgqql")
+[node name="Money" type="Label" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 41
+text = "1000$"
 
 [node name="Visuals" type="Node3D" parent="."]
+visible = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_cvnsp")
-skeleton = NodePath("../../CharacterBody3D")
+[node name="player_model" parent="Visuals" instance=ExtResource("3_rf7au")]
 
 [node name="MovementComponent" type="Node" parent="."]
 script = ExtResource("2_cvnsp")

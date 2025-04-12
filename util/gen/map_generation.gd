@@ -10,6 +10,8 @@ var thread: Thread
 @export var cart: Cart
 @export var Player:player
 @export var view_dist:float
+@onready var loading: CanvasLayer = $"../Loading"
+@onready var drill_ship: Drill = $"../DrillShip"
 
 var placed_rooms = []  # Stores placed rooms
 
@@ -41,15 +43,16 @@ class RoomInstance:
 
 
 func generate_dungeon():
-	for c in get_children():
-		placed_rooms.clear()
-		c.queue_free()
+	if call_deferred("get_children"):
+		for c in call_deferred("get_children"):
+			placed_rooms.clear()
+			c.queue_free()
 	if room_scenes.is_empty():
 		print("No preset rooms assigned!")
 		return
 
 	# Place first room at (0, 0, 0)
-	var root_room = place_first_room(start_scene)
+	var root_room = await place_first_room(start_scene)
 	if not root_room:
 		return
 	
@@ -70,26 +73,32 @@ func generate_dungeon():
 					
 	fill_doors()
 	spawn_ores()
+	Player.chara.global_position = drill_ship.player_spawn.global_position
 
 
 func place_first_room(room_scene: PackedScene) -> RoomInstance:
 	var room = room_scene.instantiate()
-	add_child(room)
-	# Get room size from a custom script or node (e.g., store dimensions in a "RoomData" node)
+	add_child.call_deferred(room)  # Defer adding the room to the scene tree
+	
+	# Wait until the next frame to ensure the room has been added to the scene tree
+	await get_tree().process_frame  # Await for the next frame
+	
+	# Now it's safe to access global_transform
 	var size = get_room_size(room)
 	room.global_transform.origin = Vector3.ZERO  # Place at the center
-	
 
 	var room_data = RoomInstance.new(room, size)
 	placed_rooms.append(room_data)
 	print(str(placed_rooms.size()) + "/" + str(max_rooms))
 	return room_data
+
+
 func try_place_room(existing_door_transform: Transform3D, room_scene: PackedScene) -> RoomInstance:
 	var rotations = [0, 90, 180, 270]
 	for angle in rotations:
 		var new_room = room_scene.instantiate()
-		add_child(new_room)
-
+		add_child.call_deferred(new_room)
+		await get_tree().process_frame
 		# Rotate before checking alignment
 		new_room.rotate_y(deg_to_rad(angle))
 
@@ -165,7 +174,10 @@ func print_debug_map():
 			print("    Door at ", door.origin)
 
 func _ready():
-	generate_dungeon()
+	if debug:
+		loading.visible = false
+	thread = Thread.new()
+	thread.start(generate_dungeon)
 
 func fill_doors():
 	for room:RoomInstance in placed_rooms:
@@ -181,14 +193,20 @@ func fill_doors():
 			if !connected:
 				var door_fill = door_fill_scene.instantiate()
 				door.add_child(door_fill)
+				await get_tree().process_frame
 				door_fill.global_position = door.global_position
 
 func spawn_ores():
 	for room:RoomInstance in placed_rooms:
 		for marker:Marker3D in room.node.get_ores():
-			var new_ore:mineable = preload("res://util/mineable_object.tscn").instantiate()
+			var new_ore:mineable = preload("res://util/objects/mineable_object.tscn").instantiate()
 			new_ore.max_progress = 10
-			add_child(new_ore)
+			randomize()
+			var ore:Ores.ores = Ores.ores.values().pick_random()
+			new_ore.ore = ore
+			marker.add_child(new_ore)
+			print(new_ore.ore)
+			await get_tree().process_frame
 			new_ore.global_rotation = marker.global_rotation
 			new_ore.global_position = marker.global_position
 

@@ -21,6 +21,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="StartGui" parent="." instance=ExtResource("1_p4yrf")]
+visible = false
 
 [node name="GameChooseMenu" parent="." instance=ExtResource("2_cvcu8")]
 visible = false

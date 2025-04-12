@@ -4,6 +4,17 @@ extends StaticBody3D
 @export var drop_scene: PackedScene
 var progress : int = 0
 @export var max_progress : int = 0
+@onready var node_3d: Node3D = $Node3D
+@export var ore:Ores.ores
+@onready var ores: Node3D = $ores
+
+func _ready() -> void:
+	for c in ores.get_children():
+		if c is MeshInstance3D:
+			var v:MeshInstance3D = c
+			var mat:StandardMaterial3D = v.get_surface_override_material(0).duplicate()
+			mat.albedo_color = Ores.get_color_for_ore(ore)
+			c.set_surface_override_material(0,mat)
 
 func interact():
 	if progress == max_progress:
@@ -19,8 +30,8 @@ func spawn_drop():
 	var drop = drop_scene.instantiate()
 	if drop.has_node("SellableComponent"):
 		drop.get_node("SellableComponent").cost = randi_range(100,20000)
-	get_parent().add_child(drop)
-	drop.global_position = global_position+Vector3(0,0.5,0)
+	get_parent().get_parent().get_parent().add_sibling(drop)
+	drop.global_position = node_3d.global_position
 
 func tween_finished():
 	var tween : Tween = create_tween()

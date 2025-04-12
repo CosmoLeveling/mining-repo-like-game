@@ -1,0 +1,93 @@
+[gd_scene load_steps=10 format=3 uid="uid://c67jqpkriiug2"]
+
+[ext_resource type="PackedScene" uid="uid://6tb12758d8ad" path="res://Scenes/features/player.tscn" id="1_djmx8"]
+[ext_resource type="Script" uid="uid://b060odgahbbhn" path="res://test_gui.gd" id="1_rsbb1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_djmx8"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_rsbb1"]
+sky_material = SubResource("ProceduralSkyMaterial_djmx8")
+
+[sub_resource type="Environment" id="Environment_xhewd"]
+background_mode = 2
+sky = SubResource("Sky_rsbb1")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_djmx8"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rsbb1"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xhewd"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_rsbb1")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xhewd"]
+size = Vector3(1, 1, 0.1)
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_rsbb1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_xhewd")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(10, 0.1, 10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00265777, 1.25077, 0.00427032)
+mesh = SubResource("QuadMesh_djmx8")
+surface_material_override/0 = SubResource("StandardMaterial3D_xhewd")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(1000, 1000)
+
+[node name="Control" type="Control" parent="SubViewport"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="SubViewport/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="SubViewport/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -178.5
+offset_top = -39.14
+offset_right = 178.5
+offset_bottom = 181.86
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 156
+text = "TEST"
+
+[node name="Player" parent="." instance=ExtResource("1_djmx8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.29571)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0658247, 1.25077, 0.00427032)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0621435, 0.00436425, 0.0585417)
+shape = SubResource("BoxShape3D_xhewd")

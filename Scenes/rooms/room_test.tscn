@@ -73,4 +73,7 @@ transform = Transform3D(0.288698, 0, -0.95742, 0, 1, 0, 0.95742, 0, 0.288698, 5.
 [node name="Marker3D4" type="Marker3D" parent="OreSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96576, 0, -5)
 
+[node name="Marker3D5" type="Marker3D" parent="OreSpawners"]
+transform = Transform3D(-0.155762, 0.963686, -0.216902, -0.562118, -0.267037, -0.782761, -0.812257, 3.70342e-09, 0.5833, -9.11372, 3.06498, 5)
+
 [editable path="basic_cave"]

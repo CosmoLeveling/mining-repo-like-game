@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnqohi6mq2o14"]
+
+[ext_resource type="Script" uid="uid://g53lmyquabub" path="res://Scripts/gui/templates/save_template.gd" id="1_bwkuf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ovckv"]
+bg_color = Color(0.168627, 0.164706, 0.168627, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0383972, 0.0383972, 0.0383971, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bwkuf"]
+bg_color = Color(0.140447, 0.140447, 0.140447, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.0383972, 0.0383972, 0.0383971, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_aabf6"]
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = null
+Button/styles/normal = SubResource("StyleBoxFlat_bwkuf")
+Button/styles/pressed = null
+
+[node name="Panel" type="Panel"]
+custom_minimum_size = Vector2(0, 40)
+offset_right = 400.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ovckv")
+script = ExtResource("1_bwkuf")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="SaveFile" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "SAVE FILE"
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Load" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_aabf6")
+text = "LOAD"
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Load" to="." method="_on_load_pressed"]

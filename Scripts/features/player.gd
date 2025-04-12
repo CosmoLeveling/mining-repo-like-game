@@ -1,7 +1,7 @@
 class_name player
 extends Node3D
 
-const MAX_STEP_HEIGHT : float= 0.5
+const MAX_STEP_HEIGHT : float= 0.6
 var _snapped_to_stairs_last_frame := false
 var _last_frame_was_on_floor = -INF
 const mouse_sensitivity : float = 0.1
@@ -13,15 +13,21 @@ const mouse_sensitivity : float = 0.1
 @onready var joint = $CharacterBody3D/HeadPivot/Camera3D/Generic6DOFJoint3D
 @onready var staticbody = $CharacterBody3D/HeadPivot/Camera3D/StaticBody3D
 @onready var main_camera: Camera3D = $CharacterBody3D/HeadPivot/Camera3D
-
+@onready var money: Label = $CanvasLayer/Money
+@onready var collision: CollisionShape3D = $CharacterBody3D/CollisionShape3D
+@onready var cart_pickup_location: Marker3D = $CharacterBody3D/CartPickupLocation
 
 @onready var movement_input_component : MovementInputComponent = MovementInputComponent.new()
 @export var movement_component : MovementComponent = null
 
 var picked_object : PickupableItem
+var cart_pull_power : int = 1
 var pull_power : int = 4
 var rotation_power : float = 0.05
 var locked : bool = false
+
+func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta: float) -> void:
 	if chara.is_on_floor(): _last_frame_was_on_floor = Engine.get_physics_frames()
@@ -36,8 +42,9 @@ func _physics_process(delta: float) -> void:
 		var a = picked_object.global_transform.origin
 		var b = pickup_location.global_transform.origin
 		if picked_object is Cart:
+			b = cart_pickup_location.global_transform.origin
 			b = Vector3(b.x,a.y,b.z)
-			var pull = Vector3((b-a)*pull_power)
+			var pull = Vector3((b-a)*cart_pull_power*16)
 			picked_object.set_linear_velocity(Vector3(pull.x,picked_object.linear_velocity.y,pull.z))
 			picked_object.global_rotation = (Vector3(picked_object.global_rotation.x,head_pivot.global_rotation.y,picked_object.global_rotation.z))
 		else:
@@ -47,6 +54,8 @@ func _physics_process(delta: float) -> void:
 		_snap_down_to_stairs_check()
 
 func _process(_delta: float) -> void:
+	if GameManager.gameData:
+		money.text = str(GameManager.gameData.money)
 	var tween: Tween = create_tween()
 	tween.tween_property(visuals,"global_position",chara.global_position,0.01)
 	
@@ -77,9 +86,6 @@ func _snap_up_stairs_check(delta) -> bool:
 	if (chara.test_move(step_pos_with_clearance, Vector3(0,-MAX_STEP_HEIGHT*2,0), down_check_result)
 	and (down_check_result.get_collider().is_class("StaticBody3D") or down_check_result.get_collider().is_class("CSGShape3D"))):
 		var step_height = ((step_pos_with_clearance.origin + down_check_result.get_travel()) - chara.global_position).y
-		# Note I put the step_height <= 0.01 in just because I noticed it prevented some physics glitchiness
-		# 0.02 was found with trial and error. Too much and sometimes get stuck on a stair. Too little and can jitter if running into a ceiling.
-		# The normal character controller (both jolt & default) seems to be able to handled steps up of 0.1 anyway
 		if step_height > MAX_STEP_HEIGHT or step_height <= 0.01 or (down_check_result.get_position() - chara.global_position).y > MAX_STEP_HEIGHT: return false
 		$CharacterBody3D/StairsAheadRaycast3D.global_position = down_check_result.get_position() + Vector3(0,MAX_STEP_HEIGHT,0) + expected_move_motion.normalized() * 0.1
 		$CharacterBody3D/StairsAheadRaycast3D.force_raycast_update()
@@ -128,18 +134,20 @@ func rotate_object(event):
 			staticbody.rotate_x(deg_to_rad(event.relative.y * rotation_power))
 			staticbody.rotate_y(deg_to_rad(event.relative.x * rotation_power))
 
+func pickup_object(pickupable_object:Node3D):
+	picked_object = pickupable_object
+	if pickupable_object.has_node("SellableComponent"):
+		var sellable_component: SellableComponent = pickupable_object.get_node("SellableComponent")
+		print("Cost: " + str(sellable_component.cost))
+		print("Rarity: " + str(sellable_component.rarity))
+	if not picked_object is Cart:
+		joint.set_node_b(picked_object.get_path())
 func handle_interact():
 	var collider = interaction.get_collider()
 	if collider != null:
 		if collider is PickupableItem:
 			var pickupable_object : PickupableItem = collider
-			picked_object = pickupable_object
-			if pickupable_object.has_node("SellableComponent"):
-				var sellable_component: SellableComponent = pickupable_object.get_node("SellableComponent")
-				print("Cost: " + str(sellable_component.cost))
-				print("Rarity: " + str(sellable_component.rarity))
-			if not collider is Cart:
-				joint.set_node_b(picked_object.get_path())
+			pickup_object(pickupable_object)
 		elif collider is mineable:
 			var mineable_object : mineable = collider
 			mineable_object.interact()
